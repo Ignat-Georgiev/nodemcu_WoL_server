@@ -3,19 +3,22 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 
-const char* ssid = "VM4992352";
-const char* password = "8jvprnGPtyym";
+//TODO Fill in Wifi details
+const char* ssid = *;
+const char* password = *;
 
 MDNSResponder mdns;
 ESP8266WebServer server(80);
 String webPage = "";
 
+//TODO
 // pins for PC control
-int powerPin = 2; // has pull up
-int resetPin = 0; // has pull up
-int statusPin = 4;
+int powerPin = *;
+int resetPin = *;
+int statusPin = *;
+// Hint: Pins 2 and 16 have pull ups and can be used for power and reset
 
-bool stat;
+int state;
 
 
 
@@ -26,7 +29,7 @@ void setup()
 
   // set up web page
   webPage += "<h1>ESP8266 WoL Web Server</h1><p>Socket #1 <a href=\"on\"><button>on</button></a>&nbsp;<a href=\"off\"><button>off</button></a>&nbsp;<a href=\"power\"><button>toggle</button></a>&nbsp;<a href=\"reset\"><button>reset</button></a></p>";
-  webPage += "<h4>PC Status: "+String(stat)+"</h4>";
+  webPage += "<h4>PC Status: "+String(state)+"</h4>";
 
 
   pinMode(powerPin, INPUT);
@@ -89,7 +92,8 @@ void setup()
 
 void loop(void) {
 	server.handleClient();
-  stat = isPowered();
+  state = isPowered();
+  webPage = "<h1>ESP8266 WoL Web Server</h1><p>Socket #1 <a href=\"on\"><button>on</button></a>&nbsp;<a href=\"off\"><button>off</button></a>&nbsp;<a href=\"power\"><button>toggle</button></a>&nbsp;<a href=\"reset\"><button>reset</button></a></p><h4>PC Status: "+String(state)+"</h4>";
 }
 
 
@@ -101,7 +105,7 @@ void togglePin(int pin, int ms)
 	pinMode(pin, INPUT);
 }
 
-bool isPowered() {
+int isPowered() {
 	return digitalRead(statusPin);
 }
 
